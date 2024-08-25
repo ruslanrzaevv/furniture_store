@@ -81,7 +81,7 @@
                     {%  else  %}
                      <p><strong>{{ good.price }}</strong></p> 
                      {% endif %}
-                     <a href="{% url "cart_add" good.slug %}" class="btn add-to-cart">
+                     <a href="{% url "cart_add" good.slug.url %}" class="btn add-to-cart">
                         <img class="mx-1" src=" {% static "/deps/icons/cart-plus.svg" %}" alt="Catalog Icon"
                             width="32" height="32">
                     </a>
