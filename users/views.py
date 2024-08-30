@@ -18,9 +18,13 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                if request.GET.get('next', None):
-                    return redirect(request.GET.get('next'))
+                messages.success(request, f'{username}, Вы вошли в аккаунт')
+
+                redirect_page = request.POST.get('next', None)
+                if redirect_page and redirect_page != reverse('logout'):
+                    return HttpResponseRedirect(request.POST.get('next'))
                 return HttpResponseRedirect(reverse('index'))
+              
     else:
         form = UserLoginForm()
 
@@ -68,6 +72,7 @@ def profile(request):
 
 
 def users_cart(request):
+    
     return render(request, 'users/users_cart.html')
 
 def logout(request):

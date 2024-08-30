@@ -3,7 +3,9 @@
 {% load static %}
 {% load goods_tag %}
 
-
+{% block carts_tags %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
 
 {% block content %}
 <div class="row">
@@ -33,7 +35,7 @@
             </div>
             
             <div class="form-check text-white mx-3">
-                <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price"
+                <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price">
                 <label class="form-check-label" for="flexRadioDefault2">
                     От дешевых к дорогим
                 </label>
@@ -76,14 +78,16 @@
                 <div class="d-flex justify-content-between">
                     {% if good.dicount %}
                    <p><s>{{ good.price }}</s> $</p>
-                    <p><strong>{{ good.skidka }} $</strong></p>
+                    <p><strong>{{ good.sell_price }} $</strong></p>
                     <span class="badge bg-warning text-dark">Скидка {{ good.dicount }} %</span>
                     {%  else  %}
                      <p><strong>{{ good.price }}</strong></p> 
                      {% endif %}
-                     <a href="{% url "cart_add" good.slug.url %}" class="btn add-to-cart">
+                     <a href="{% url "cart_add" good.slug %}" class="btn add-to-cart">
+                        {% csrf_token %}
                         <img class="mx-1" src=" {% static "/deps/icons/cart-plus.svg" %}" alt="Catalog Icon"
                             width="32" height="32">
+                                
                     </a>
                 </div>
             </div>

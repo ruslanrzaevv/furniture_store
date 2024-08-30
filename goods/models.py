@@ -37,7 +37,7 @@ class Products(models.Model):
         return f"{self.id:05}"
     
 
-    def skidka(self):
+    def sell_price(self):
         if self.dicount:
             return round(self.price - self.price*self.dicount/100, 2)
         
