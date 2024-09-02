@@ -6,6 +6,7 @@ from django.contrib import messages
 
 
 from users.forms import UserLoginForm, UserRegistrtionForm, ProfileForm
+from carts.models import Cart
 
 
 def login(request):
@@ -16,9 +17,18 @@ def login(request):
             username = request.POST['username']
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
+
+
+            session_key = request.session.session_key
+
+
             if user:
                 auth.login(request, user)
                 messages.success(request, f'{username}, Вы вошли в аккаунт')
+
+
+                if session_key:
+                    Cart.objects.filter(session_key=session_key).update(user=user)
 
                 redirect_page = request.POST.get('next', None)
                 if redirect_page and redirect_page != reverse('logout'):
@@ -39,11 +49,18 @@ def login(request):
 def registration(request):
     if request.method == 'POST':
         form = UserRegistrtionForm(data=request.POST)
-
         if form.is_valid():
-            user = form.save()  
-            auth.login(request, user)  
-            return redirect('login')
+            form.save()
+
+            session_key = request.session.session_key
+
+            user = form.instance
+            auth.login(request, user)
+
+            if session_key:
+                Cart.objects.filter(session_key=session_key).update(user=user)
+            messages.success(request, f"{user.username}, Вы успешно зарегистрированы и вошли в аккаунт")
+            return HttpResponseRedirect(reverse('main:index'))
     else:
         form = UserRegistrtionForm()
     
@@ -51,7 +68,8 @@ def registration(request):
         'title': 'Home - Регистрация',
         'form': form
     }
-    return render(request, 'users/registr.html', context)
+    return render(request, 'users/registration.html', context)
+
 
 
 def profile(request):

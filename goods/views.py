@@ -1,12 +1,10 @@
 from django.shortcuts import render, get_list_or_404
 from django.core.paginator import Paginator
 from .uttils import q_search
-from django.contrib.auth.decorators import login_required
 
 from .models import Products
 
 
-@login_required
 def catalog(request, cat_slug=None):
 
     page = request.GET.get('page', 1)
@@ -39,7 +37,6 @@ def catalog(request, cat_slug=None):
     return render(request, 'goods/catalog.html', context)
 
 
-@login_required
 def product(request, prod_slug):
     product = Products.objects.get(slug=prod_slug)
 
