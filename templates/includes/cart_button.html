@@ -30,7 +30,7 @@
                     <!-- Закончилась разметка корзины -->
 
                     {% if carts %}
-                        <a class="btn btn-dark" href="orders/create_order.html">
+                        <a class="btn btn-dark" href="{% url "create_order" %}">
                             Оформить заказ
                         </a>
                     {% endif %}
